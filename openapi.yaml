@@ -109,7 +109,7 @@ paths:
                     type: string
 components:
   schemas:
-    Characteristic:
+    Memory:
       type: object
       properties:
         ram_memory:
@@ -119,6 +119,9 @@ components:
       required:
         - ram_memory
         - rom_memory
+    Characteristic:
+      allOf:
+        - $ref: '#/components/schemas/Memory'
     Phone:
       type: object
       properties:
