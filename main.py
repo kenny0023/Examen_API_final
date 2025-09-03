@@ -29,3 +29,18 @@ phones_db: List[Phone] = []
 def create_phones(phones: List[Phone]):
     phones_db.extend(phones)
     return {"message": "Phones added", "count": len(phones)}
+
+# Route GET /phones
+@app.get("/phones", response_model=List[Phone])
+def get_phones():
+    return phones_db
+
+# Route GET /phones/{id}
+from fastapi import HTTPException
+
+@app.get("/phones/{id}", response_model=Phone)
+def get_phone(id: str):
+    for phone in phones_db:
+        if phone.identifier == id:
+            return phone
+    raise HTTPException(status_code=404, detail=f"Le phone avec l'id '{id}' n'existe pas ou n'a pas été trouvé.")
