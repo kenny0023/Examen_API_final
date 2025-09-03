@@ -1,0 +1,137 @@
+openapi: 3.0.3
+info:
+  title: STD24118
+  description: "This is a specification of STD24118"
+  version: "1.0.0"
+servers:
+  - url: http://localhost:800
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: OK
+  /phones:
+    get:
+      summary: Get all phones
+      responses:
+        '200':
+          description: List of phones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Phone'
+    post:
+      summary: Add phones
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Phone'
+      responses:
+        '201':
+          description: Phones created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  count:
+                    type: integer
+  /phones/{id}:
+    get:
+      summary: Get phone by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Phone found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+        '404':
+          description: Phone not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+  /phones/{id}/characteristics:
+    put:
+      summary: Update phone characteristics
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Characteristic'
+      responses:
+        '200':
+          description: Phone updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+        '404':
+          description: Phone not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+components:
+  schemas:
+    Characteristic:
+      type: object
+      properties:
+        ram_memory:
+          type: number
+        rom_memory:
+          type: number
+      required:
+        - ram_memory
+        - rom_memory
+    Phone:
+      type: object
+      properties:
+        identifier:
+          type: string
+        brand:
+          type: string
+        model:
+          type: string
+        characteristics:
+          $ref: '#/components/schemas/Characteristic'
+      required:
+        - identifier
+        - brand
+        - model
+        - characteristics
