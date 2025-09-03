@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from fastapi.responses import PlainTextResponse
 
 app = FastAPI()
 
-@app.get("/ping", response_class=PlainTextResponse)
-async def ping():
-    return "pong"
+# Route GET /health
+@app.get("/health")
+def health():
+    return "OK"
